@@ -31,6 +31,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var input: EditText
     private lateinit var micBtn: ImageButton
     private lateinit var status: TextView
+    private lateinit var readBtn: ImageButton
+    private var autoRead = false
 
     private var recognizer: SpeechRecognizer? = null
     private var listening = false
@@ -53,6 +55,11 @@ class MainActivity : AppCompatActivity() {
         input = findViewById(R.id.input)
         micBtn = findViewById(R.id.mic)
         status = findViewById(R.id.status)
+        readBtn = findViewById(R.id.readBtn)
+
+        autoRead = getSharedPreferences("rafeeq", MODE_PRIVATE).getBoolean("auto_read", false)
+        updateReadIcon()
+        readBtn.setOnClickListener { toggleAutoRead() }
 
         adapter = ChatAdapter(messages)
         list.layoutManager = LinearLayoutManager(this)
@@ -108,11 +115,32 @@ class MainActivity : AppCompatActivity() {
                     list.scrollToPosition(messages.size - 1)
                 }
                 busy = false
-                if (byVoice && ttsReady) {
+                if (autoRead && ttsReady) {
                     tts?.speak(reply, TextToSpeech.QUEUE_FLUSH, null, "answer")
                 }
             }
         }
+    }
+
+    // ---------- القراءة التلقائية (الافتراضي: متوقفة) ----------
+    private fun updateReadIcon() {
+        readBtn.setImageResource(if (autoRead) R.drawable.ic_volume_on else R.drawable.ic_volume_off)
+    }
+
+    private fun toggleAutoRead() {
+        if (!autoRead && !ttsReady) {
+            Toast.makeText(this, getString(R.string.autoread_unavailable), Toast.LENGTH_LONG).show()
+            return
+        }
+        autoRead = !autoRead
+        getSharedPreferences("rafeeq", MODE_PRIVATE).edit().putBoolean("auto_read", autoRead).apply()
+        if (!autoRead) tts?.stop()
+        updateReadIcon()
+        Toast.makeText(
+            this,
+            getString(if (autoRead) R.string.autoread_on else R.string.autoread_off),
+            Toast.LENGTH_SHORT
+        ).show()
     }
 
     // ---------- المايك ----------
