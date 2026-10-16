@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">رفيق التمريض</string>
+    <string name="subtitle">كلية التمريض - جامعة دمنهور</string>
+    <string name="hint">اكتب سؤالك التمريضي هنا…</string>
+    <string name="welcome">أهلاً بيك في «رفيق التمريض» 👋\nاسألني عن أي حاجة تخص التمريض: التعامل مع المرضى، الإجراءات التمريضية، العلامات الحيوية، أو حالات الطوارئ.\nتقدر تكتب أو تضغط على المايك وتتكلم.</string>
+    <string name="mic_denied">محتاج صلاحية المايك علشان تقدر تسأل بالصوت</string>
+    <string name="mic_unavailable">خدمة التعرف على الصوت مش متاحة على الجهاز ده</string>
+    <string name="listening">بسمعك…</string>
+    <string name="disclaimer">للأغراض التعليمية فقط – التزم دائماً ببروتوكول المستشفى وتعليمات الطبيب.</string>
+    <string name="thinking">بفكر…</string>
+</resources>
