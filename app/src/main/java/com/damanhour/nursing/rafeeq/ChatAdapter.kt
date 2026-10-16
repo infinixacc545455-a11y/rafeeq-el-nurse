@@ -1,6 +1,7 @@
 package com.damanhour.nursing.rafeeq
 
 import android.graphics.Color
+import android.graphics.Typeface
 import android.graphics.drawable.GradientDrawable
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -28,18 +29,30 @@ class ChatAdapter(private val items: List<Msg>) : RecyclerView.Adapter<ChatAdapt
         val m = items[position]
         val ctx = holder.itemView.context
         val d = ctx.resources.displayMetrics.density
+        val big = 20f * d
+        val small = 5f * d
 
         holder.bubble.text = m.text
         val bg = GradientDrawable()
-        bg.cornerRadius = 18f * d
         if (m.user) {
+            // اليمين (RTL): الزاوية السفلية اليمنى صغيرة
+            bg.cornerRadii = floatArrayOf(big, big, big, big, small, small, big, big)
             bg.setColor(ctx.getColor(R.color.user_bubble))
             holder.bubble.setTextColor(Color.WHITE)
+            holder.bubble.setTypeface(null, Typeface.NORMAL)
             holder.row.gravity = Gravity.START
         } else {
+            // الشمال: الزاوية السفلية اليسرى صغيرة
+            bg.cornerRadii = floatArrayOf(big, big, big, big, big, big, small, small)
             bg.setColor(ctx.getColor(R.color.bot_bubble))
-            bg.setStroke((1 * d).toInt(), Color.parseColor("#D5E3E0"))
-            holder.bubble.setTextColor(Color.parseColor("#1B2B29"))
+            bg.setStroke((1 * d).toInt(), Color.parseColor("#DCE8E5"))
+            if (m.loading) {
+                holder.bubble.setTextColor(Color.parseColor("#7F9A95"))
+                holder.bubble.setTypeface(null, Typeface.ITALIC)
+            } else {
+                holder.bubble.setTextColor(Color.parseColor("#1B2B29"))
+                holder.bubble.setTypeface(null, Typeface.NORMAL)
+            }
             holder.row.gravity = Gravity.END
         }
         holder.bubble.background = bg

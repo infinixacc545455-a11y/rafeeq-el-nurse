@@ -45,15 +45,6 @@ class MainActivity : AppCompatActivity() {
             else Toast.makeText(this, getString(R.string.mic_denied), Toast.LENGTH_LONG).show()
         }
 
-    private val quickQuestions = listOf(
-        "🚨 مريض توقف قلبه",
-        "🩺 قياس العلامات الحيوية",
-        "💉 إعطاء حقنة عضل",
-        "🫁 مريض عنده ضيق تنفس",
-        "🧼 مكافحة العدوى",
-        "🩸 التعامل مع نزيف"
-    )
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -70,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         messages.add(Msg(getString(R.string.welcome), user = false, welcome = true))
         adapter.notifyItemInserted(0)
 
-        buildChips()
+        setListening(false)
 
         findViewById<ImageButton>(R.id.send).setOnClickListener {
             sendMessage(input.text.toString(), false)
@@ -82,32 +73,6 @@ class MainActivity : AppCompatActivity() {
                 val r = tts?.setLanguage(Locale("ar"))
                 ttsReady = r != TextToSpeech.LANG_MISSING_DATA && r != TextToSpeech.LANG_NOT_SUPPORTED
             }
-        }
-    }
-
-    private fun dp(v: Int) = (v * resources.displayMetrics.density).toInt()
-
-    private fun buildChips() {
-        val box = findViewById<LinearLayout>(R.id.chips)
-        for (q in quickQuestions) {
-            val tv = TextView(this)
-            tv.text = q
-            tv.textSize = 13f
-            tv.setTextColor(ContextCompat.getColor(this, R.color.teal_dark))
-            tv.setPadding(dp(12), dp(8), dp(12), dp(8))
-            val bg = GradientDrawable()
-            bg.cornerRadius = dp(20).toFloat()
-            bg.setColor(Color.WHITE)
-            bg.setStroke(dp(1), ContextCompat.getColor(this, R.color.teal))
-            tv.background = bg
-            val lp = LinearLayout.LayoutParams(
-                LinearLayout.LayoutParams.WRAP_CONTENT,
-                LinearLayout.LayoutParams.WRAP_CONTENT
-            )
-            lp.setMargins(dp(4), 0, dp(4), 0)
-            tv.layoutParams = lp
-            tv.setOnClickListener { sendMessage(q.substringAfter(" "), false) }
-            box.addView(tv)
         }
     }
 
@@ -219,7 +184,7 @@ class MainActivity : AppCompatActivity() {
             micBtn.setColorFilter(Color.RED)
             status.text = getString(R.string.listening)
         } else {
-            micBtn.clearColorFilter()
+            micBtn.setColorFilter(Color.parseColor("#00796B"))
             status.text = getString(R.string.disclaimer)
         }
     }
